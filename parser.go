@@ -33,9 +33,7 @@ func (p *Parser) ReadFromString(s string) {
 				current_section = line[1 : len(line)-1]
 				p.config[current_section] = map[string]string{}
 			default:
-				fmt.Println(line)
 				field := strings.Split(line, " = ")
-				fmt.Println(field)
 				key, value := string(field[0]), string(field[1])
 				p.config[current_section][key] = value
 			}
@@ -55,7 +53,7 @@ func (p *Parser) ReadFromFile(file_path string) error {
 	return nil
 }
 
-func (p *Parser) Stringify(config Config) string {
+func stringify(config Config) string {
 	content := ""
 
 	for title, body := range config {
@@ -70,7 +68,7 @@ func (p *Parser) Stringify(config Config) string {
 }
 
 func (p *Parser) WriteToFile(file_path string) error {
-	s := p.Stringify(p.config)
+	s := stringify(p.config)
 	bytes := []byte(s)
 
 	file, c_err := os.Create(file_path)
@@ -92,5 +90,6 @@ func (p *Parser) Get(section, key string) string {
 }
 
 func (p *Parser) Set(section, key, value string) {
-	p.config[section][key] = value
+	inner := map[string]string{key: value}
+	p.config[section] = inner
 }
