@@ -97,3 +97,30 @@ func TestFlow(t *testing.T) {
 
 	p.WriteToFile("./sample2.ini")
 }
+
+func TestFlow2(t *testing.T) {
+	input := `
+[Profile]
+name = jarvis
+
+# credential
+password = secret
+
+[Deployment]
+project = peertube
+name = peertest
+public_ip = true
+cpu = 4
+memory = 8192
+`
+	file_path := "./sample.ini"
+
+	str_reader := ReadFromStirng(input)
+	file_reader, _ := ReadFromFile(file_path)
+
+	Parse(str_reader)
+	println("=============")
+	Parse(file_reader)
+
+	// defer file_reader.Close()
+}

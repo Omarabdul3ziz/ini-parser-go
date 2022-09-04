@@ -1,7 +1,9 @@
 package parser
 
 import (
+	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 )
@@ -92,4 +94,28 @@ func (p *Parser) Get(section, key string) string {
 func (p *Parser) Set(section, key, value string) {
 	inner := map[string]string{key: value}
 	p.config[section] = inner
+}
+
+func ReadFromFile(file_path string) (*os.File, error) {
+	file, err := os.Open(file_path)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// The returned value of type *os.File implements the io.Reader interface.
+	return file, nil
+}
+
+func ReadFromStirng(input string) io.Reader {
+	return strings.NewReader(input)
+}
+
+func Parse(reader io.Reader) {
+	scanner := bufio.NewScanner(reader)
+	scanner.Split(bufio.ScanLines)
+
+	for scanner.Scan() {
+		fmt.Println(scanner.Text())
+	}
 }
